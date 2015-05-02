@@ -10,11 +10,28 @@ public class MapMaker : MonoBehaviour {
     public GameObject ceiling;
     public GameObject floor;
 
+    public Material material;
+
+    private MeshFilter filter;
+
+    public int tile_count_y = 4;
+    public int tile_count_x = 3;
+    public int tileset_x = 0;
+    public int tileset_y = 0;
+
+    private static Vector3[] basePoints = {
+		new Vector3(-0.5f, -0.5f, 0.5f),
+		new Vector3(-0.5f, 0.5f,  0.5f),
+		new Vector3(0.5f,  -0.5f, 0.5f),
+		new Vector3(0.5f,   0.5f, 0.5f)
+	};
+
+    private static int[] baseTris = { 0, 2, 1, 2, 3, 1 };
+
+
 	// Use this for initialization
 	void Start () {
 	    //map = new map[height,width];
-
-        
 
         height = 12;
         width = 12;
@@ -36,10 +53,7 @@ public class MapMaker : MonoBehaviour {
             {
                 if (map[h, w] != 0)
                 {
-                    //spawn shit.
-                    Debug.Log("h: " + h + ", w:" + w);
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.transform.position = new Vector3(w, 0.5f, h);
+                    createWall(w, h);
                 }
             }
         }
@@ -50,6 +64,45 @@ public class MapMaker : MonoBehaviour {
         floor.transform.localScale = new Vector3(width, height, 1);
         ceiling.transform.localScale = new Vector3(width, height, 1);
 	}
+
+    private void createWall(int x, int y)
+    {
+        createWallSide(x, y, 0);
+        createWallSide(x, y, 90);
+        createWallSide(x, y, 180);
+        createWallSide(x, y, 270);
+    }
+
+    private void createWallSide(int x, int y, int rot)
+    {
+        float tsize_x = 1f / tile_count_x;
+        float tsize_y = 1f / tile_count_y;
+
+        Debug.Log(tsize_x + "\t" + tsize_y);
+
+        Mesh mesh = new Mesh();
+        mesh.name = "Wall";
+
+        mesh.vertices = basePoints;
+        mesh.triangles = baseTris;
+        Vector2[] uv = new Vector2[] {
+			new Vector2(tsize_x * this.tileset_x, 		tsize_y * this.tileset_y),
+			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * this.tileset_y),
+			new Vector2(tsize_x * this.tileset_x, 		tsize_y * (this.tileset_y + 1)),
+			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * (this.tileset_y + 1))
+		};
+        mesh.uv = uv;
+        GameObject meshObj = new GameObject("Wall");
+        MeshFilter meshFilter = (MeshFilter)meshObj.AddComponent(typeof(MeshFilter));
+        meshFilter.mesh = mesh;
+        MeshRenderer renderer = meshObj.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
+        renderer.material = material;
+        meshObj.transform.position = new Vector3(x, 0.5f, y);
+        meshObj.transform.rotation = Quaternion.Euler(0, rot, 270);
+
+        meshObj.AddComponent(typeof(BoxCollider));
+    }
+
 
     // Update is called once per frame
     void Update()
