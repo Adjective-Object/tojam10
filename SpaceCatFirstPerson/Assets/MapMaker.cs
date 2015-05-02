@@ -24,9 +24,12 @@ public class MapMaker : MonoBehaviour {
     private MeshFilter filter;
 
     public int tile_count_y = 4;
-    public int tile_count_x = 3;
+    public int tile_count_x = 4;
     public int tileset_x = 0;
     public int tileset_y = 0;
+
+    const float tilesize_x = 0.25f;
+    const float tilesize_y = 0.25f;
 
     private static Vector3[] basePoints = {
 		new Vector3(-0.5f, -0.5f, 0.5f),
@@ -80,8 +83,8 @@ public class MapMaker : MonoBehaviour {
         floor.GetComponent<Renderer>().material.renderQueue = 1;
         ceiling.GetComponent<Renderer>().material.renderQueue = 2;
 
-        float tsize_x = (1f / tile_count_x)*width;
-        float tsize_y = (1f / tile_count_y)*height;
+        float tsize_x = (1f / tile_count_x);
+        float tsize_y = (1f / tile_count_y);
         floor.GetComponent<MeshFilter>().mesh.uv = new Vector2[] {
 			new Vector2(tsize_x * this.tileset_x, 		tsize_y * this.tileset_y),
 			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * this.tileset_y),
@@ -106,21 +109,16 @@ public class MapMaker : MonoBehaviour {
     /// </summary>
     private void createWallSide(int x, int y, int rot)
     {
-        float tsize_x = 1f / tile_count_x;
-        float tsize_y = 1f / tile_count_y;
-
-        Debug.Log(tsize_x + "\t" + tsize_y);
-
         Mesh mesh = new Mesh();
         mesh.name = "Wall";
 
         mesh.vertices = basePoints;
         mesh.triangles = baseTris;
         Vector2[] uv = new Vector2[] {
-			new Vector2(tsize_x * this.tileset_x, 		tsize_y * this.tileset_y),
-			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * this.tileset_y),
-			new Vector2(tsize_x * this.tileset_x, 		tsize_y * (this.tileset_y + 1)),
-			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * (this.tileset_y + 1))
+			new Vector2(tilesize_x * this.tileset_x, 		tilesize_y * this.tileset_y),
+			new Vector2(tilesize_x * (this.tileset_x + 1), tilesize_y * this.tileset_y),
+			new Vector2(tilesize_x * this.tileset_x, 		tilesize_y * (this.tileset_y + 1)),
+			new Vector2(tilesize_x * (this.tileset_x + 1), tilesize_y * (this.tileset_y + 1))
 		};
         mesh.uv = uv;
         GameObject meshObj = new GameObject("Wall");
