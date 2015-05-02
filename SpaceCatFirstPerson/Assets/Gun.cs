@@ -2,7 +2,8 @@
 using System.Collections;
 
 public abstract class Gun {
-	public abstract void Init();
+	public abstract void Init(MonoBehaviour parent);
+	public abstract void Equip(MonoBehaviour parent);
 	public abstract void Shoot(MonoBehaviour parent);
 	
 	
@@ -31,8 +32,23 @@ public class CatGun : Gun {
 	
 	protected Object bulletPrefab;
 	protected static int shootSpeed = 8;
-	public override void Init(){
+	protected RuntimeAnimatorController animator;
+	public string controllerName {
+		get {return "catpistol/shooty";}
+	}
+
+	
+	public override void Init(MonoBehaviour parent){
 		this.bulletPrefab = Resources.Load("bullet");
+		Debug.Log("loading "+ this.controllerName);
+		this.animator = 
+			(RuntimeAnimatorController) Resources.Load(this.controllerName);
+	}
+	
+	public override void Equip(MonoBehaviour parent) {
+		Debug.Log(this.controllerName);
+		parent.GetComponentInParent<Animator>()
+			.runtimeAnimatorController = this.animator;
 	}
 		
 	public override void Shoot(MonoBehaviour parent){
@@ -44,7 +60,27 @@ public class CatGun : Gun {
 	}
 }
 
-public class CatSpreadGun : CatGun {
+public class CatSpreadGun : Gun {
+	
+	protected Object bulletPrefab;
+	protected static int shootSpeed = 8;
+	protected RuntimeAnimatorController animator;
+	public string controllerName {
+		get {return "shotgun/shooty_shotgun";}
+	}
+
+	public override void Init(MonoBehaviour parent){
+		this.bulletPrefab = Resources.Load("bullet");
+		Debug.Log("loading "+ this.controllerName);
+		this.animator = 
+			(RuntimeAnimatorController) Resources.Load(this.controllerName);
+	}
+	
+	public override void Equip(MonoBehaviour parent) {
+		Debug.Log(this.controllerName);
+		parent.GetComponentInParent<Animator>()
+			.runtimeAnimatorController = this.animator;
+	}
 	
 	public override void Shoot(MonoBehaviour parent){
 		for(int i=0; i<10; i++) {

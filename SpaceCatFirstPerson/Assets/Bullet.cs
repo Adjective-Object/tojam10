@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour {
 	public Vector3 step;
 
 	private float initialTime;
+	public Animator animator;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +19,7 @@ public class Bullet : MonoBehaviour {
 	void Update () {
 		if (Time.realtimeSinceStartup - this.initialTime > maxLife) {
 			Destroy(this.gameObject);
-			Debug.Log("killing bullet of old age");
+			//Debug.Log("killing bullet of old age");
 		}
 		this.transform.position += this.step * Time.deltaTime;
 	}
@@ -27,7 +28,10 @@ public class Bullet : MonoBehaviour {
 		if (other.GetComponentInParent<Bullet>() != null) return;
 		LivingEntity e = other.GetComponentInParent<LivingEntity>();
 		if (e!=null) e.damageFor(this.damage);
-		Debug.Log("bullet collided");
+		//animator.SetBool("explode", true);
+	}
+	
+	public void Suicide() {
 		Destroy(this.gameObject);
 	}
 }
