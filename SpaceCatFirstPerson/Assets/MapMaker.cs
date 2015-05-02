@@ -80,8 +80,8 @@ public class MapMaker : MonoBehaviour {
         floor.GetComponent<Renderer>().material.renderQueue = 1;
         ceiling.GetComponent<Renderer>().material.renderQueue = 2;
 
-        float tsize_x = 1f / tile_count_x /width;
-        float tsize_y = 1f / tile_count_y /height;
+        float tsize_x = (1f / tile_count_x)*width;
+        float tsize_y = (1f / tile_count_y)*height;
         floor.GetComponent<MeshFilter>().mesh.uv = new Vector2[] {
 			new Vector2(tsize_x * this.tileset_x, 		tsize_y * this.tileset_y),
 			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * this.tileset_y),
