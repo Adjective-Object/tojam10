@@ -1680,6 +1680,19 @@ public class MapMaker : MonoBehaviour {
     private void createWall(int x, int y)
     {
         GameObject wall = (GameObject)Instantiate(wallPrefab, new Vector3(x, 0.5f, y), Quaternion.identity);
+        MeshFilter meshFilter = wall.transform.GetComponent<MeshFilter>(); ;
+        // Now store a local reference for the UVs
+        Vector2[] theUVs = new Vector2[meshFilter.mesh.uv.Length];
+        theUVs = meshFilter.mesh.uv;
+ 
+        // set UV co-ordinates
+        theUVs[10] = new Vector2(0f, 1.0f);
+        theUVs[11] = new Vector2(1.0f, 1.0f);
+        theUVs[6] = new Vector2(0f, 0f);
+        theUVs[7] = new Vector2(1.0f, 0.0f);
+ 
+        // Assign the mesh its new UVs
+        meshFilter.mesh.uv = theUVs;
     }
 
 
