@@ -37,16 +37,6 @@ public class MapquadMaker : MonoBehaviour {
 			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * (this.tileset_y + 1))
 		};
 		this.filter.mesh.uv = uv;
-		
-		foreach (Vector2 u in uv) {
-			Debug.Log(u);	
-		}
-
-		foreach (Vector3 p in basePoints) {
-			Debug.Log(p);	
-		}
-		
-
 	}
 	
 	// Update is called once per frame
