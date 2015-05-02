@@ -3,12 +3,21 @@ using System.Collections;
 
 public class MapMaker : MonoBehaviour {
 
+
+    public enum TileTypes
+    {
+        Empty = 0,
+        Blocked = 1,
+        PlayerSpawn = 2
+    }
+
     public int[,] map;
     public int width;
     public int height;
 
     public GameObject ceiling;
     public GameObject floor;
+    public GameObject player;
 
     public Material material;
 
@@ -36,7 +45,7 @@ public class MapMaker : MonoBehaviour {
         height = 12;
         width = 12;
         map = new int[,] {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                          {1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1},
+                          {1, (int)TileTypes.PlayerSpawn, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1},
                           {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1},
                           {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1},
                           {1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1},
@@ -51,9 +60,13 @@ public class MapMaker : MonoBehaviour {
         {
             for (int w = 0; w < width; w++)
             {
-                if (map[h, w] != 0)
+                if (map[h, w] == (int)TileTypes.Blocked)
                 {
                     createWall(w, h);
+                }
+                else if (map[h, w] == (int)TileTypes.PlayerSpawn)
+                {
+                    player.transform.position = new Vector3(w, 0.5f, h);
                 }
             }
         }
