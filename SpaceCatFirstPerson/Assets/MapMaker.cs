@@ -102,7 +102,7 @@ public class MapMaker : MonoBehaviour {
         GameObject wall = new GameObject("Wall");
         wall.transform.position = new Vector3(x, 0.5f, y);
         BoxCollider box = (BoxCollider)wall.AddComponent(typeof(BoxCollider));
-        box.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);\
+        box.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
         //Create 4 sides 
         createWallSide(x, y, 0);
