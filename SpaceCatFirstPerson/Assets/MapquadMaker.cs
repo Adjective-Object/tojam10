@@ -11,10 +11,10 @@ public class MapquadMaker : MonoBehaviour {
 	public int tileset_y = 0;
 
 	private static Vector3[] basePoints = {
-		new Vector3(-0.5f, 0f ,-0.5f),
-		new Vector3(-0.5f, 0f, 0.5f),
-		new Vector3(0.5f,  0f, -0.5f),
-		new Vector3(0.5f,  0f, 0.5f)
+		new Vector3(-0.5f, -0.5f, 0f),
+		new Vector3(-0.5f, 0.5f,  0f),
+		new Vector3(0.5f,  -0.5f, 0f),
+		new Vector3(0.5f,   0.5f, 0f)
 	};
 
 	private static int[] baseTris = {0,1,2,2,1,3};
