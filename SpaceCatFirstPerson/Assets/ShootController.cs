@@ -45,7 +45,6 @@ public class ShootController : MonoBehaviour {
 	}
 	
 	public void ShootBullet () {
-		Debug.Log("Shoot!");
 		this.guns[this.equipped].Shoot(this);
 	}
 }

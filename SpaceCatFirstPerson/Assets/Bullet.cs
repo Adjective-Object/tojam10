@@ -29,7 +29,6 @@ public class Bullet : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) {
 		if (other.GetComponentInParent<Bullet>() != null) return;
-		Debug.Log("Collide!");
 
 		LivingEntity e = other.GetComponentInParent<LivingEntity>();
 		if (e!=null) e.damageFor(this.damage);
@@ -38,7 +37,6 @@ public class Bullet : MonoBehaviour {
 		animator.SetBool("explode", true);
 		this.transform.position -= Time.deltaTime * this.step;
 		this.step = Vector3.zero;
-		Debug.Log("ResolveCollide");
 	}
 	
 	public void Suicide() {

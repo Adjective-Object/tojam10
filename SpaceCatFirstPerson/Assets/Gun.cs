@@ -47,7 +47,7 @@ public class CatGun : Gun {
 	}
 	
 	public override void Equip(MonoBehaviour parent) {
-		Debug.Log(this.controllerName);
+		//Debug.Log(this.controllerName);
 		parent.GetComponentInParent<Animator>()
 			.runtimeAnimatorController = this.animator;
 	}
@@ -78,7 +78,7 @@ public class CatSpreadGun : Gun {
 	}
 	
 	public override void Equip(MonoBehaviour parent) {
-		Debug.Log(this.controllerName);
+		//Debug.Log(this.controllerName);
 		parent.GetComponentInParent<Animator>()
 			.runtimeAnimatorController = this.animator;
 	}
@@ -89,7 +89,7 @@ public class CatSpreadGun : Gun {
 				this.bulletPrefab, 
 				parent, 
 				new Vector2(-10,10), 
-				new Vector2(shootSpeed-3, shootSpeed+3));			
+				new Vector2(shootSpeed-1, shootSpeed+1));
 		}
 	}
 	
