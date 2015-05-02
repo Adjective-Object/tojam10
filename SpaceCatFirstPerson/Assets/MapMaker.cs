@@ -64,8 +64,8 @@ public class MapMaker : MonoBehaviour {
         floor.transform.localScale = new Vector3(width, height, 1);
         ceiling.transform.localScale = new Vector3(width, height, 1);
 
-        floor.GetComponent<Renderer>().material.renderQueue = 0;
-        ceiling.GetComponent<Renderer>().material.renderQueue = 1;
+        floor.GetComponent<Renderer>().material.renderQueue = 1;
+        ceiling.GetComponent<Renderer>().material.renderQueue = 2;
 
         float tsize_x = 1f / tile_count_x /width;
         float tsize_y = 1f / tile_count_y /height;
