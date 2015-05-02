@@ -98,6 +98,13 @@ public class MapMaker : MonoBehaviour {
     /// </summary>
     private void createWall(int x, int y)
     {
+        //Create collision box
+        GameObject wall = new GameObject("Wall");
+        wall.transform.position = new Vector3(x, 0.5f, y);
+        BoxCollider box = (BoxCollider)wall.AddComponent(typeof(BoxCollider));
+        box.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);\
+
+        //Create 4 sides 
         createWallSide(x, y, 0);
         createWallSide(x, y, 90);
         createWallSide(x, y, 180);
@@ -107,7 +114,7 @@ public class MapMaker : MonoBehaviour {
     /// <summary>
     /// Create one side of a wall cube
     /// </summary>
-    private void createWallSide(int x, int y, int rot)
+    private GameObject createWallSide(int x, int y, int rot)
     {
         Mesh mesh = new Mesh();
         mesh.name = "Wall";
@@ -121,7 +128,7 @@ public class MapMaker : MonoBehaviour {
 			new Vector2(tilesize_x * (this.tileset_x + 1), tilesize_y * (this.tileset_y + 1))
 		};
         mesh.uv = uv;
-        GameObject meshObj = new GameObject("Wall");
+        GameObject meshObj = new GameObject("WallSide");
         MeshFilter meshFilter = (MeshFilter)meshObj.AddComponent(typeof(MeshFilter));
         meshFilter.mesh = mesh;
         MeshRenderer renderer = meshObj.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
@@ -129,7 +136,7 @@ public class MapMaker : MonoBehaviour {
         meshObj.transform.position = new Vector3(x, 0.5f, y);
         meshObj.transform.rotation = Quaternion.Euler(0, rot, 270);
 
-        meshObj.AddComponent(typeof(BoxCollider));
+        return meshObj;
     }
 
 
