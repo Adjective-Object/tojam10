@@ -58,8 +58,8 @@ public class MapMaker : MonoBehaviour {
             }
         }
 
-        floor.transform.position = new Vector3(width/2, 0, height/2);
-        ceiling.transform.position = new Vector3(width/2, 1, height/2);
+        floor.transform.position = new Vector3(width / 2 - 0.5f, 0, height / 2 - 0.5f);
+        ceiling.transform.position = new Vector3(width / 2 - 0.5f, 1, height / 2 - 0.5f);
 
         floor.transform.localScale = new Vector3(width, height, 1);
         ceiling.transform.localScale = new Vector3(width, height, 1);
@@ -77,6 +77,9 @@ public class MapMaker : MonoBehaviour {
 		};
 	}
 
+    /// <summary>
+    /// Create a wall cube at given tile position.
+    /// </summary>
     private void createWall(int x, int y)
     {
         createWallSide(x, y, 0);
@@ -85,6 +88,9 @@ public class MapMaker : MonoBehaviour {
         createWallSide(x, y, 270);
     }
 
+    /// <summary>
+    /// Create one side of a wall cube
+    /// </summary>
     private void createWallSide(int x, int y, int rot)
     {
         float tsize_x = 1f / tile_count_x;
