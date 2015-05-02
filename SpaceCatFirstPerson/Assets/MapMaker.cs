@@ -1591,6 +1591,7 @@ public class MapMaker : MonoBehaviour {
     public GameObject player;
 
     public Material material;
+    public GameObject wallPrefab;
 
     private MeshFilter filter;
 
@@ -1641,9 +1642,9 @@ public class MapMaker : MonoBehaviour {
                             mapBuilder.map[h + 1, w] != (int)TileTypes.Blocked ||
                             mapBuilder.map[h, w - 1] != (int)TileTypes.Blocked ||
                             mapBuilder.map[h, w + 1] != (int)TileTypes.Blocked)
-                            createWall(w, h, 0, 3);
+                            createWall(w, h);
                     }else
-                        createWall(w, h, 0, 3);
+                        createWall(w, h);
                 }
             }
             str.Append("\n");
@@ -1676,48 +1677,9 @@ public class MapMaker : MonoBehaviour {
     /// <summary>
     /// Create a wall cube at given tile position.
     /// </summary>
-    private void createWall(int x, int y, int tilex, int tiley)
+    private void createWall(int x, int y)
     {
-        //Create collision box
-        GameObject wall = new GameObject("Wall");
-        wall.transform.position = new Vector3(x, 0.5f, y);
-        BoxCollider box = (BoxCollider)wall.AddComponent(typeof(BoxCollider));
-        box.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-
-        //Create 4 sides 
-        createWallSide(x, y, 0, tilex, tiley);
-        createWallSide(x, y, 90, tilex, tiley);
-        createWallSide(x, y, 180, tilex, tiley);
-        createWallSide(x, y, 270, tilex, tiley);
-    }
-
-    /// <summary>
-    /// Create one side of a wall cube
-    /// </summary>
-    private GameObject createWallSide(int x, int y, int rot, int tilex, int tiley)
-    {
-        tiley = tile_count_y - tiley - 1;
-        Mesh mesh = new Mesh();
-        mesh.name = "Wall";
-
-        mesh.vertices = basePoints;
-        mesh.triangles = baseTris;
-        Vector2[] uv = new Vector2[] {
-			new Vector2(tilesize_x * tilex, 		tilesize_y * tiley),
-			new Vector2(tilesize_x * (tilex + 1), tilesize_y * tiley),
-			new Vector2(tilesize_x * tilex, 		tilesize_y * (tiley + 1)),
-			new Vector2(tilesize_x * (tilex + 1), tilesize_y * (tiley + 1))
-		};
-        mesh.uv = uv;
-        GameObject meshObj = new GameObject("WallSide");
-        MeshFilter meshFilter = (MeshFilter)meshObj.AddComponent(typeof(MeshFilter));
-        meshFilter.mesh = mesh;
-        MeshRenderer renderer = meshObj.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
-        renderer.material = material;
-        meshObj.transform.position = new Vector3(x, 0.5f, y);
-        meshObj.transform.rotation = Quaternion.Euler(0, rot, 90);
-
-        return meshObj;
+        GameObject wall = (GameObject)Instantiate(wallPrefab, new Vector3(x, 0.5f, y), Quaternion.identity);
     }
 
 
