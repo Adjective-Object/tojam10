@@ -14,8 +14,7 @@ public class MapMaker : MonoBehaviour {
 	void Start () {
 	    //map = new map[height,width];
 
-        floor.transform.position = new Vector3(0, 0, 0);
-        ceiling.transform.position = new Vector3(0, 1, 0);
+        
 
         height = 12;
         width = 12;
@@ -44,6 +43,12 @@ public class MapMaker : MonoBehaviour {
                 }
             }
         }
+
+        floor.transform.position = new Vector3(width/2, 0, height/2);
+        ceiling.transform.position = new Vector3(width/2, 1, height/2);
+
+        floor.transform.localScale = new Vector3(width, height, 1);
+        ceiling.transform.localScale = new Vector3(width, height, 1);
 	}
 
     // Update is called once per frame
