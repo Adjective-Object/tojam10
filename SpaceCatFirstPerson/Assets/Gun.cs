@@ -12,6 +12,7 @@ public abstract class Gun {
 			MonoBehaviour parent,
 			Vector2 xSpread,
 			Vector2 speedSpread) {
+		Debug.Log(prefab);
 		GameObject g = (GameObject) Object.Instantiate(prefab);
 		
 		float xDrift = Random.Range(xSpread.x, xSpread.y);
@@ -39,7 +40,7 @@ public class CatGun : Gun {
 
 	
 	public override void Init(MonoBehaviour parent){
-		this.bulletPrefab = Resources.Load("bullet");
+		this.bulletPrefab = Resources.Load("catpistol/pistolBullet");
 		Debug.Log("loading "+ this.controllerName);
 		this.animator = 
 			(RuntimeAnimatorController) Resources.Load(this.controllerName);
@@ -70,7 +71,7 @@ public class CatSpreadGun : Gun {
 	}
 
 	public override void Init(MonoBehaviour parent){
-		this.bulletPrefab = Resources.Load("bullet");
+		this.bulletPrefab = Resources.Load("shotgun/shotgunBullet");
 		Debug.Log("loading "+ this.controllerName);
 		this.animator = 
 			(RuntimeAnimatorController) Resources.Load(this.controllerName);

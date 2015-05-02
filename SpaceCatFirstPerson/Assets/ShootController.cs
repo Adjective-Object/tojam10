@@ -3,7 +3,9 @@ using System.Collections;
 
 public class ShootController : MonoBehaviour {
 
-	public string shootButton, prevButton, nextButton;
+	public string 	shootButton = "Fire1", 
+					prevButton = "PrevGun",
+					nextButton = "NextGun";
 	public Animator animatedThing;
 	public int equipped;
 	public Gun[] guns = {
