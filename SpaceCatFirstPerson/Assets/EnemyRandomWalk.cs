@@ -25,6 +25,8 @@ public class EnemyRandomWalk : MonoBehaviour {
 	public float attackChance = 0.9f;
 	public float moveChance = 0.5f;
 
+    public AudioClip aggroClip;
+
 	// Use this for initialization
 	void Start () {
 		if (player == null) {
@@ -42,6 +44,7 @@ public class EnemyRandomWalk : MonoBehaviour {
 			if((player.transform.position - this.transform.position).magnitude < aggroRange) {
 				aggro = true;
 				this.animator.SetBool("aggro", true);
+                GetComponent<AudioSource>().PlayOneShot(aggroClip, 1.0f);
 			}
 			return;
 		} else {
