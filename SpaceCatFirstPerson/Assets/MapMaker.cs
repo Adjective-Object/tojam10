@@ -1730,7 +1730,7 @@ public class MapMaker : MonoBehaviour {
                 continue;
             }
 
-            int numEnemies = random.Next(1, 4);
+            int numEnemies = random.Next(3, 8);
             for (int i = 0; i < numEnemies; i++)
             {
                 GameObject enemy = (GameObject)Instantiate(enemies[0], new Vector3(room.Y + random.Next(0, room.Height), 0.5f, room.X + random.Next(0, room.Width)), Quaternion.identity);
