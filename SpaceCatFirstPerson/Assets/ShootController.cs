@@ -10,7 +10,8 @@ public class ShootController : MonoBehaviour {
 	public int equipped;
 	public Gun[] guns = {
 		new CatGun(),
-		new CatSpreadGun()
+		new CatSpreadGun(),
+		new Knife()
 	};
 
 	// Use this for initialization

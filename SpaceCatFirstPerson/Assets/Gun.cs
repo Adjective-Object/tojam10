@@ -92,6 +92,36 @@ public class CatSpreadGun : Gun {
 				new Vector2(shootSpeed-1, shootSpeed+1));
 		}
 	}
-	
 }
 
+
+public class Knife : Gun {
+	
+	protected Object bulletPrefab;
+	protected static int shootSpeed = 10;
+	protected RuntimeAnimatorController animator;
+	public string controllerName {
+		get {return "ThrowingKnife/knife_animation_controller";}
+	}
+
+	public override void Init(MonoBehaviour parent){
+		this.bulletPrefab = Resources.Load("ThrowingKnife/knife_bullet");
+		Debug.Log("loading "+ this.controllerName);
+		this.animator = 
+			(RuntimeAnimatorController) Resources.Load(this.controllerName);
+	}
+	
+	public override void Equip(MonoBehaviour parent) {
+		//Debug.Log(this.controllerName);
+		parent.GetComponentInParent<Animator>()
+			.runtimeAnimatorController = this.animator;
+	}
+	
+	public override void Shoot(MonoBehaviour parent){
+		CatGun.SpewBullet(
+			this.bulletPrefab, 
+			parent, 
+			new Vector2(-3,3), 
+			new Vector2(shootSpeed-1, shootSpeed+1));
+	}
+}
