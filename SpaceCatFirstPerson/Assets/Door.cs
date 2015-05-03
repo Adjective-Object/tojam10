@@ -14,6 +14,9 @@ public class Door : MonoBehaviour {
     public GameObject doorModel;
     public BoxCollider doorCollider;
 
+    static float doorSpeed = 5f;
+    static float doorTime = 1/doorSpeed;
+
 	// Use this for initialization
 	void Start () {
         isOpening = false;
@@ -26,7 +29,7 @@ public class Door : MonoBehaviour {
         if (isOpening)
         {
             timer += Time.deltaTime;
-            if (timer > 0.5f)
+            if (timer >doorTime)
             {
                 isOpen = true;
                 isOpening = false;
@@ -35,13 +38,13 @@ public class Door : MonoBehaviour {
             }
             else
             {
-                doorModel.transform.Translate(0, Time.deltaTime * 2, 0);
+                doorModel.transform.Translate(0, Time.deltaTime * doorSpeed, 0);
             }
         }
         else if (isOpen)
         {
             timer += Time.deltaTime;
-            if (timer > 0.5f)
+            if (timer > doorTime)
             {
                 isOpen = false;
                 isClosing = true;
@@ -52,13 +55,13 @@ public class Door : MonoBehaviour {
         else if (isClosing)
         {
             timer += Time.deltaTime;
-            if (timer > 0.5f)
+            if (timer > doorTime)
             {
                 isClosing = false;
             }
             else
             {
-                doorModel.transform.Translate(0, -Time.deltaTime * 2, 0);
+                doorModel.transform.Translate(0, -Time.deltaTime * doorSpeed, 0);
             }
         }
 	}
