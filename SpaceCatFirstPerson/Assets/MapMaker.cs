@@ -1593,7 +1593,8 @@ public class MapMaker : MonoBehaviour {
 
     public GameObject player;
 
-    public Material material;
+    public Material[] wallMaterials;
+    public Texture[] floorTextures;
     public GameObject doorPrefab;
     public GameObject wallPrefab;
     public GameObject floorPrefab;
@@ -1618,11 +1619,14 @@ public class MapMaker : MonoBehaviour {
 
     private static int[] baseTris = { 0, 2, 1, 2, 3, 1 };
 
+    System.Random random;
 
 	// Use this for initialization
 	void Start () {
         height = 150;
         width = 150;
+
+        random = new System.Random();
 
         MapMaker.csMapbuilder mapBuilder = new MapMaker.csMapbuilder(width, height);
         StringBuilder str = new StringBuilder();
@@ -1665,9 +1669,11 @@ public class MapMaker : MonoBehaviour {
 
         foreach (csMapbuilder.Point corridor in mapBuilder.corridorEdges)
         {
-            if (mapBuilder.map[corridor.X, corridor.Y+1] != (int)TileTypes.Blocked)
+            if (mapBuilder.map[corridor.X, corridor.Y + 1] != (int)TileTypes.Blocked
+                && mapBuilder.map[corridor.X + 1, corridor.Y] == (int)TileTypes.Blocked)
                 Instantiate(doorPrefab, new Vector3(corridor.Y, 0.0f, corridor.X), Quaternion.identity);
-            else if (mapBuilder.map[corridor.X + 1, corridor.Y] != (int)TileTypes.Blocked)
+            else if (mapBuilder.map[corridor.X + 1, corridor.Y] != (int)TileTypes.Blocked
+                && mapBuilder.map[corridor.X, corridor.Y + 1] == (int)TileTypes.Blocked)
             {
                 GameObject door = (GameObject)Instantiate(doorPrefab, new Vector3(corridor.Y, 0.0f, corridor.X), Quaternion.identity);
                 door.transform.Rotate(0, 90, 0);
@@ -1681,6 +1687,8 @@ public class MapMaker : MonoBehaviour {
     private void createFloor(int x, int y)
     {
         GameObject floor = (GameObject)Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
+        if (random.NextDouble() > 0.5)
+            floor.GetComponent<Renderer>().material.mainTexture = floorTextures[random.Next(0, floorTextures.Length)];
     }
 
     private void createCeiling(int x, int y)
@@ -1707,6 +1715,9 @@ public class MapMaker : MonoBehaviour {
  
         // Assign the mesh its new UVs
         meshFilter.mesh.uv = theUVs;
+
+        if(random.NextDouble() > 0.5)
+            wall.GetComponent<Renderer>().material = wallMaterials[random.Next(0, wallMaterials.Length)];
     }
 
 
