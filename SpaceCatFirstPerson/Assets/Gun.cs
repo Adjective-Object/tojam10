@@ -27,6 +27,22 @@ public abstract class Gun {
 			Vector3.forward * 
 			(speedDrift);
 	}
+	
+	
+	public static void  SpewBullet(
+			Object prefab,
+			MonoBehaviour parent,
+			float angle,
+			float speed) {
+		Debug.Log(prefab);
+		GameObject g = (GameObject) Object.Instantiate(prefab);
+		
+		g.transform.position = parent.transform.position + 
+			parent.transform.rotation * Vector3.forward * 0.3f;
+		g.GetComponent<Bullet>().step = 
+			Quaternion.AngleAxis(angle,Vector3.up) * 
+				Vector3.forward * speed;
+	}
 }
 
 public class CatGun : Gun {
@@ -53,7 +69,7 @@ public class CatGun : Gun {
 	}
 		
 	public override void Shoot(MonoBehaviour parent){
-		CatGun.SpewBullet(
+		Gun.SpewBullet(
 			bulletPrefab, 
 			parent, 
 			new Vector2(0,0), 
@@ -85,7 +101,7 @@ public class CatSpreadGun : Gun {
 	
 	public override void Shoot(MonoBehaviour parent){
 		for(int i=0; i<10; i++) {
-			CatGun.SpewBullet(
+			Gun.SpewBullet(
 				this.bulletPrefab, 
 				parent, 
 				new Vector2(-10,10), 
@@ -118,10 +134,40 @@ public class Knife : Gun {
 	}
 	
 	public override void Shoot(MonoBehaviour parent){
-		CatGun.SpewBullet(
+		Gun.SpewBullet(
 			this.bulletPrefab, 
 			parent, 
 			new Vector2(-3,3), 
 			new Vector2(shootSpeed-1, shootSpeed+1));
+	}
+}
+
+
+public class ABiggGun : Gun {
+	
+	protected Object bulletPrefabSmall, bulletPrefabBig;
+	protected static float shootSpeed = 5;
+	
+	public override void Init(MonoBehaviour parent){
+		this.bulletPrefabSmall = Resources.Load("biggBullet");
+		this.bulletPrefabBig = Resources.Load("biggerBullet");
+	}
+	
+	public override void Shoot(MonoBehaviour parent){
+		for (int i=0; i<360; i+=30) {
+			Gun.SpewBullet(
+				this.bulletPrefabSmall, 
+				parent, 
+				(float) i, 
+				shootSpeed);		
+		}
+		Gun.SpewBullet(
+			this.bulletPrefabBig, 
+			parent, 
+			parent.transform.rotation.eulerAngles.y,
+			shootSpeed * 0.8f);
+	}
+	
+	public override void Equip(MonoBehaviour parent) {
 	}
 }
