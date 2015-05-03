@@ -1593,10 +1593,9 @@ public class MapMaker : MonoBehaviour {
 
     public GameObject player;
 
-    public Material[] wallMaterials;
     public Texture[] floorTextures;
     public GameObject doorPrefab;
-    public GameObject wallPrefab;
+    public GameObject[] wallPrefabs;
     public GameObject floorPrefab;
     public GameObject ceilingPrefab;
 
@@ -1711,9 +1710,7 @@ public class MapMaker : MonoBehaviour {
 
     private void createFloor(int x, int y)
     {
-        GameObject floor = (GameObject)Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
-        if (random.NextDouble() > 0.5)
-            floor.GetComponent<Renderer>().material.mainTexture = floorTextures[random.Next(0, floorTextures.Length)];
+        Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
     }
 
     private void createCeiling(int x, int y)
@@ -1726,7 +1723,13 @@ public class MapMaker : MonoBehaviour {
     /// </summary>
     private void createWall(int x, int y)
     {
-        GameObject wall = (GameObject)Instantiate(wallPrefab, new Vector3(x, 0.5f, y), Quaternion.identity);
+        GameObject wall = null;
+        if (random.NextDouble() > 0.35)
+            wall = (GameObject)Instantiate(wallPrefabs[0], new Vector3(x, 0.5f, y), Quaternion.identity);
+        else
+            wall = (GameObject)Instantiate(wallPrefabs[1], new Vector3(x, 0.5f, y), Quaternion.identity);
+
+        
         MeshFilter meshFilter = wall.transform.GetComponent<MeshFilter>(); ;
         // Now store a local reference for the UVs
         Vector2[] theUVs = new Vector2[meshFilter.mesh.uv.Length];
@@ -1740,9 +1743,6 @@ public class MapMaker : MonoBehaviour {
  
         // Assign the mesh its new UVs
         meshFilter.mesh.uv = theUVs;
-
-        if(random.NextDouble() > 0.5)
-            wall.GetComponent<Renderer>().material = wallMaterials[random.Next(0, wallMaterials.Length)];
     }
 
 
