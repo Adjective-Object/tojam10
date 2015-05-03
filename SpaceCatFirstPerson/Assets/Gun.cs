@@ -19,7 +19,7 @@ public abstract class Gun {
 		float speedDrift = Random.Range(speedSpread.x, speedSpread.y);
 		
 		g.transform.position = parent.transform.position + 
-			parent.transform.rotation * Vector3.forward * 0.3f;
+			parent.transform.rotation * Vector3.forward * 0.5f;
 		g.GetComponent<Bullet>().step = 
 			Quaternion.AngleAxis(
 				parent.transform.rotation.eulerAngles.y + xDrift,
@@ -38,7 +38,7 @@ public abstract class Gun {
 		GameObject g = (GameObject) Object.Instantiate(prefab);
 		
 		g.transform.position = parent.transform.position + 
-			parent.transform.rotation * Vector3.forward * 0.3f;
+			parent.transform.rotation * Vector3.forward * 0.5f;
 		g.GetComponent<Bullet>().step = 
 			Quaternion.AngleAxis(angle,Vector3.up) * 
 				Vector3.forward * speed;
