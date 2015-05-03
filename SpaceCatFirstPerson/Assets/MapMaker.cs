@@ -1594,9 +1594,14 @@ public class MapMaker : MonoBehaviour {
     public GameObject player;
 
     public Texture[] floorTextures;
+    public Texture[] floorBossTextures;
+
     public GameObject doorPrefab;
     public GameObject[] wallPrefabs;
+    public GameObject bossWallPrefab;
     public GameObject floorPrefab;
+
+    public Texture[] ceilingBossTextures;
     public GameObject ceilingPrefab;
 
     public GameObject teleporterPrefab;
@@ -1646,6 +1651,9 @@ public class MapMaker : MonoBehaviour {
             height += 10;
         }
 
+        //Final room/boss room
+        csMapbuilder.Rectangle finalRoom = mapBuilder.rctBuiltRooms[mapBuilder.rctBuiltRooms.Count - 1];
+
         //Draw map.
         //StringBuilder str = new StringBuilder();
         for (int h = 0; h < height; h++)
@@ -1662,15 +1670,31 @@ public class MapMaker : MonoBehaviour {
                             mapBuilder.map[h + 1, w] != (int)TileTypes.Blocked ||
                             mapBuilder.map[h, w - 1] != (int)TileTypes.Blocked ||
                             mapBuilder.map[h, w + 1] != (int)TileTypes.Blocked)
-                            createWall(w, h);
+                        {
+                            if (isInRec(finalRoom, w + 1, h)
+                                || isInRec(finalRoom, w - 1, h)
+                                || isInRec(finalRoom, w, h+1)
+                                || isInRec(finalRoom, w, h-1))
+                                createWall(w, h, true);
+                            else
+                                createWall(w, h, false);
+                        }
                     }
                     else
-                        createWall(w, h);
+                        createWall(w, h, false);
                 }
                 else
                 {
-                    createFloor(w, h);
-                    createCeiling(w, h);
+                    if (isInRec(finalRoom, w, h))
+                    {
+                        createFloor(w, h, true);
+                        createCeiling(w, h, true);
+                    }
+                    else
+                    {
+                        createFloor(w, h, false);
+                        createCeiling(w, h, false);
+                    }
                 }
             }
             //str.Append("\n");
@@ -1714,7 +1738,6 @@ public class MapMaker : MonoBehaviour {
         }
 
         //Create level teleporter
-        csMapbuilder.Rectangle finalRoom = mapBuilder.rctBuiltRooms[mapBuilder.rctBuiltRooms.Count - 1];
         Instantiate(teleporterPrefab, new Vector3(finalRoom.Y + random.Next(0, finalRoom.Height), 0.5f, finalRoom.X + random.Next(0, finalRoom.Width)), Quaternion.identity);
     }
 
@@ -1728,29 +1751,53 @@ public class MapMaker : MonoBehaviour {
         createMap();
     }
 
-    private void createFloor(int x, int y)
+    private bool isInRec(csMapbuilder.Rectangle rect, int x, int y)
     {
-        GameObject floor = (GameObject)Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
-        if (random.NextDouble() > 0.5)
-            floor.GetComponent<Renderer>().material.mainTexture = floorTextures[random.Next(0, floorTextures.Length)];
+        return x >= rect.Y && x <= (rect.Y + rect.Height) && y >= rect.X && y <= (rect.X + rect.Width);
     }
 
-    private void createCeiling(int x, int y)
+    private void createFloor(int x, int y, bool isBossRoom)
+    {
+        GameObject floor = (GameObject)Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
+        if (isBossRoom)
+        {
+            floor.GetComponent<Renderer>().material.mainTexture = floorBossTextures[random.Next(0, floorBossTextures.Length)];
+        }
+        else
+        {
+            if (random.NextDouble() > 0.5)
+                floor.GetComponent<Renderer>().material.mainTexture = floorTextures[random.Next(0, floorTextures.Length)];
+        }
+    }
+
+    private void createCeiling(int x, int y, bool isBossRoom)
     {
         GameObject ceil = (GameObject)Instantiate(ceilingPrefab, new Vector3(x, 1.5f, y), Quaternion.identity);
+
+        if (isBossRoom)
+        {
+            ceil.GetComponent<Renderer>().material.mainTexture = ceilingBossTextures[random.Next(0, ceilingBossTextures.Length)];
+        }
     }
 
     /// <summary>
     /// Create a wall cube at given tile position.
     /// </summary>
-    private void createWall(int x, int y)
+    private void createWall(int x, int y, bool isBossRoom)
     {
         GameObject wall = null;
-        if (random.NextDouble() > 0.35)
-            wall = (GameObject)Instantiate(wallPrefabs[0], new Vector3(x, 0.5f, y), Quaternion.identity);
-        else
-            wall = (GameObject)Instantiate(wallPrefabs[1], new Vector3(x, 0.5f, y), Quaternion.identity);
 
+        if (isBossRoom)
+        {
+            wall = (GameObject)Instantiate(bossWallPrefab, new Vector3(x, 0.5f, y), Quaternion.identity);
+        }
+        else
+        {
+            if (random.NextDouble() > 0.35)
+                wall = (GameObject)Instantiate(wallPrefabs[0], new Vector3(x, 0.5f, y), Quaternion.identity);
+            else
+                wall = (GameObject)Instantiate(wallPrefabs[1], new Vector3(x, 0.5f, y), Quaternion.identity);
+        }
         
         MeshFilter meshFilter = wall.transform.GetComponent<MeshFilter>(); ;
         // Now store a local reference for the UVs
