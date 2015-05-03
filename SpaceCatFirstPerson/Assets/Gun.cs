@@ -74,6 +74,7 @@ public class CatGun : Gun {
 			parent, 
 			new Vector2(0,0), 
 			new Vector2(shootSpeed, shootSpeed));
+
 	}
 }
 

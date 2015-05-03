@@ -14,6 +14,8 @@ public class ShootController : MonoBehaviour {
 		new Knife()
 	};
 
+    public AudioClip[] gunSfx;
+
 	// Use this for initialization
 	void Start () {
 		foreach (Gun g in guns) {
@@ -47,5 +49,6 @@ public class ShootController : MonoBehaviour {
 	
 	public void ShootBullet () {
 		this.guns[this.equipped].Shoot(this);
+        GetComponent<AudioSource>().PlayOneShot(gunSfx[this.equipped], 1.0f);
 	}
 }
