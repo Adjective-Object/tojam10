@@ -945,16 +945,16 @@ public class MapMaker : MonoBehaviour {
         {
             Map_Size = new Size(x, y);
             map = new int[Map_Size.Width, Map_Size.Height];
-            Corridor_MaxTurns = 5;
-            Room_Min = new Size(3, 3);
-            Room_Max = new Size(15, 15);
+            Corridor_MaxTurns = 6;
+            Room_Min = new Size(5, 5);
+            Room_Max = new Size(10, 10);
             Corridor_Min = 3;
             Corridor_Max = 15;
-            MaxRooms = 15;
+            MaxRooms = 10;
             Map_Size = new Size(150, 150);
 
-            RoomDistance = 5;
-            CorridorDistance = 2;
+            RoomDistance = 3;
+            CorridorDistance = 1;
             CorridorSpace = 2;
 
             BuildProb = 50;
