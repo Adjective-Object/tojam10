@@ -1669,9 +1669,11 @@ public class MapMaker : MonoBehaviour {
 
         foreach (csMapbuilder.Point corridor in mapBuilder.corridorEdges)
         {
-            if (mapBuilder.map[corridor.X, corridor.Y+1] != (int)TileTypes.Blocked)
+            if (mapBuilder.map[corridor.X, corridor.Y + 1] != (int)TileTypes.Blocked
+                && mapBuilder.map[corridor.X + 1, corridor.Y] == (int)TileTypes.Blocked)
                 Instantiate(doorPrefab, new Vector3(corridor.Y, 0.0f, corridor.X), Quaternion.identity);
-            else if (mapBuilder.map[corridor.X + 1, corridor.Y] != (int)TileTypes.Blocked)
+            else if (mapBuilder.map[corridor.X + 1, corridor.Y] != (int)TileTypes.Blocked
+                && mapBuilder.map[corridor.X, corridor.Y + 1] == (int)TileTypes.Blocked)
             {
                 GameObject door = (GameObject)Instantiate(doorPrefab, new Vector3(corridor.Y, 0.0f, corridor.X), Quaternion.identity);
                 door.transform.Rotate(0, 90, 0);
