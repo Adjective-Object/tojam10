@@ -1593,7 +1593,7 @@ public class MapMaker : MonoBehaviour {
 
     public GameObject player;
 
-    public Material material;
+    public Material[] wallMaterials;
     public GameObject doorPrefab;
     public GameObject wallPrefab;
     public GameObject floorPrefab;
@@ -1618,11 +1618,14 @@ public class MapMaker : MonoBehaviour {
 
     private static int[] baseTris = { 0, 2, 1, 2, 3, 1 };
 
+    System.Random random;
 
 	// Use this for initialization
 	void Start () {
         height = 150;
         width = 150;
+
+        random = new System.Random();
 
         MapMaker.csMapbuilder mapBuilder = new MapMaker.csMapbuilder(width, height);
         StringBuilder str = new StringBuilder();
@@ -1707,6 +1710,9 @@ public class MapMaker : MonoBehaviour {
  
         // Assign the mesh its new UVs
         meshFilter.mesh.uv = theUVs;
+
+        if(random.NextDouble() > 0.5)
+            wall.GetComponent<Renderer>().material = wallMaterials[random.Next(0, wallMaterials.Length)];
     }
 
 
