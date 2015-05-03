@@ -78,6 +78,40 @@ public class CatGun : Gun {
 	}
 }
 
+
+public class DogGun : Gun {
+	
+	protected Object bulletPrefab;
+	protected static int shootSpeed = 8;
+	protected RuntimeAnimatorController animator;
+	public string controllerName {
+		get {return "catpistol/shooty";}
+	}
+
+	
+	public override void Init(MonoBehaviour parent){
+		this.bulletPrefab = Resources.Load("catpistol/pistolBulletWeak");
+		Debug.Log("loading "+ this.controllerName);
+		this.animator = 
+			(RuntimeAnimatorController) Resources.Load(this.controllerName);
+	}
+	
+	public override void Equip(MonoBehaviour parent) {
+		//Debug.Log(this.controllerName);
+		parent.GetComponentInParent<Animator>()
+			.runtimeAnimatorController = this.animator;
+	}
+		
+	public override void Shoot(MonoBehaviour parent){
+		Gun.SpewBullet(
+			bulletPrefab, 
+			parent, 
+			new Vector2(0,0), 
+			new Vector2(shootSpeed, shootSpeed));
+
+	}
+}
+
 public class CatSpreadGun : Gun {
 	
 	protected Object bulletPrefab;

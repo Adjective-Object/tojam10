@@ -5,7 +5,7 @@ public class GunShooter : MonoBehaviour {
 
 	public int gunIndex;
 	static Gun[] guns = {
-		new CatGun(),
+		new DogGun(),
 		new ABiggGun()
 	};
 

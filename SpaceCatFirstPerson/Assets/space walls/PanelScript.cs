@@ -13,11 +13,11 @@ public class PanelScript : MonoBehaviour
     public Texture[] RightPanels;
 
 
-    System.Random rand;
+    static System.Random rand = new System.Random();
     // Use this for initialization
     void Start()
     {
-        rand = new System.Random();
+        
         switch (rand.Next(0, 3))
         {
             case 0: //Full panel

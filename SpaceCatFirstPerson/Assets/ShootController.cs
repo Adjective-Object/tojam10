@@ -4,6 +4,7 @@ using System.Collections;
 public class ShootController : MonoBehaviour {
 
 	public string 	shootButton = "Fire1", 
+					shootAxis = "Fire1A",
 					prevButton = "PrevGun",
 					nextButton = "NextGun";
 	public Animator animatedThing;
@@ -21,14 +22,14 @@ public class ShootController : MonoBehaviour {
 		foreach (Gun g in guns) {
 			g.Init(this);
 		}
-		this.EquipGun(1);
+		this.EquipGun(0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		animatedThing.SetBool(
 			"shoot", 
-			Input.GetButton(shootButton));
+			Input.GetButton(shootButton) || Input.GetAxis(shootAxis) > 0);
 		if(Input.GetButtonDown(prevButton)) {
 			this.equipped = 
 				(this.equipped + this.guns.Length - 1) %
