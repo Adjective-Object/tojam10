@@ -1730,7 +1730,9 @@ public class MapMaker : MonoBehaviour {
 
     private void createFloor(int x, int y)
     {
-        Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
+        GameObject floor = (GameObject)Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
+        if (random.NextDouble() > 0.5)
+            floor.GetComponent<Renderer>().material.mainTexture = floorTextures[random.Next(0, floorTextures.Length)];
     }
 
     private void createCeiling(int x, int y)
