@@ -855,7 +855,9 @@ public class MapMaker : MonoBehaviour {
         /// <summary>
         /// Built corridors stored here
         /// </summary>
-        private List<Point> lBuilltCorridors;
+        public List<Point> lBuilltCorridors;
+
+        public List<Point> corridorEdges;
 
         /// <summary>
         /// Corridor to be built stored here
@@ -967,6 +969,7 @@ public class MapMaker : MonoBehaviour {
             lPotentialCorridor = new List<Point>();
             rctBuiltRooms = new List<Rectangle>();
             lBuilltCorridors = new List<Point>();
+            corridorEdges = new List<Point>();
 
             map = new int[Map_Size.Width, Map_Size.Height];
             for (int x = 0; x < Map_Size.Width; x++)
@@ -1305,6 +1308,8 @@ public class MapMaker : MonoBehaviour {
         /// </summary>
         private void Corridor_Build()
         {
+            corridorEdges.Add(lPotentialCorridor[0]);
+            corridorEdges.Add(lPotentialCorridor[lPotentialCorridor.Count - 1]);
             foreach (Point p in lPotentialCorridor)
             {
                 Point_Set(p.X, p.Y, emptycell);
@@ -1589,6 +1594,7 @@ public class MapMaker : MonoBehaviour {
     public GameObject player;
 
     public Material material;
+    public GameObject doorPrefab;
     public GameObject wallPrefab;
     public GameObject floorPrefab;
     public GameObject ceilingPrefab;
@@ -1656,6 +1662,17 @@ public class MapMaker : MonoBehaviour {
         }
 
         Debug.Log(str);
+
+        foreach (csMapbuilder.Point corridor in mapBuilder.corridorEdges)
+        {
+            if (mapBuilder.map[corridor.X, corridor.Y+1] != (int)TileTypes.Blocked)
+                Instantiate(doorPrefab, new Vector3(corridor.Y, 0.0f, corridor.X), Quaternion.identity);
+            else if (mapBuilder.map[corridor.X + 1, corridor.Y] != (int)TileTypes.Blocked)
+            {
+                GameObject door = (GameObject)Instantiate(doorPrefab, new Vector3(corridor.Y, 0.0f, corridor.X), Quaternion.identity);
+                door.transform.Rotate(0, 90, 0);
+            }
+        }
 
         player.transform.position = new Vector3(mapBuilder.rctBuiltRooms[0].X, 0.5f, mapBuilder.rctBuiltRooms[0].Y);
         
