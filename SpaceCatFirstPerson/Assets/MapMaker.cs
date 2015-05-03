@@ -1600,6 +1600,8 @@ public class MapMaker : MonoBehaviour {
     public GameObject floorPrefab;
     public GameObject ceilingPrefab;
 
+    public GameObject[] enemies;
+
     private MeshFilter filter;
 
     public int tile_count_y = 4;
@@ -1629,15 +1631,18 @@ public class MapMaker : MonoBehaviour {
         random = new System.Random();
 
         MapMaker.csMapbuilder mapBuilder = new MapMaker.csMapbuilder(width, height);
-        StringBuilder str = new StringBuilder();
+        
+        //Attempt to make a map.
         while (mapBuilder.Build_OneStartRoom() == false)
         {
+            //Map generation failed
             Debug.Log("Map gen failed, raising map size and retrying...");
             width+=10;
             height+=10;
-            mapBuilder.Build_OneStartRoom();
         }
 
+        //Draw map.
+        StringBuilder str = new StringBuilder();
         for (int h = 0; h < height; h++)
         {
             for (int w = 0; w < width; w++)
@@ -1647,6 +1652,7 @@ public class MapMaker : MonoBehaviour {
                 {
                     if (h > 0 && w > 0 && w < width - 1 && h < height - 1)
                     {
+                        //Don't spawn walls if point is sorrounded by walls.
                         if (mapBuilder.map[h - 1, w] != (int)TileTypes.Blocked ||
                             mapBuilder.map[h + 1, w] != (int)TileTypes.Blocked ||
                             mapBuilder.map[h, w - 1] != (int)TileTypes.Blocked ||
@@ -1667,6 +1673,7 @@ public class MapMaker : MonoBehaviour {
 
         Debug.Log(str);
 
+        //Create doors for all corridors.
         foreach (csMapbuilder.Point corridor in mapBuilder.corridorEdges)
         {
             if (mapBuilder.map[corridor.X, corridor.Y + 1] != (int)TileTypes.Blocked
@@ -1680,8 +1687,27 @@ public class MapMaker : MonoBehaviour {
             }
         }
 
+        //Move player to starting room
         player.transform.position = new Vector3(mapBuilder.rctBuiltRooms[0].X, 0.5f, mapBuilder.rctBuiltRooms[0].Y);
         
+
+        //Create enemies
+        bool isStartingRoom = true;
+        foreach (csMapbuilder.Rectangle room in mapBuilder.rctBuiltRooms)
+        {
+            //Skip first room
+            if (isStartingRoom)
+            {
+                isStartingRoom = false;
+                continue;
+            }
+
+            int numEnemies = random.Next(1, 4);
+            for (int i = 0; i < numEnemies; i++)
+            {
+                GameObject enemy = (GameObject)Instantiate(enemies[0], new Vector3(room.Y + random.Next(0, room.Height), 0.5f, room.X + random.Next(0, room.Width)), Quaternion.identity);
+            }
+        }
 	}
 
     private void createFloor(int x, int y)
