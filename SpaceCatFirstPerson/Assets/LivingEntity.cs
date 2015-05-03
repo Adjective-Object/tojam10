@@ -12,6 +12,10 @@ public class LivingEntity : MonoBehaviour {
 	public float vmin = 1;
 	public float vmax = 3;
 	
+	public bool alive {
+		get {return this.health > 0;}
+	}
+	
 	private Animator stateMachine;
 
 	// Use this for initialization
