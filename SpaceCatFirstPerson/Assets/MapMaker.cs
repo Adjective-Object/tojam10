@@ -1594,6 +1594,7 @@ public class MapMaker : MonoBehaviour {
     public GameObject player;
 
     public Material[] wallMaterials;
+    public Texture[] floorTextures;
     public GameObject doorPrefab;
     public GameObject wallPrefab;
     public GameObject floorPrefab;
@@ -1684,6 +1685,8 @@ public class MapMaker : MonoBehaviour {
     private void createFloor(int x, int y)
     {
         GameObject floor = (GameObject)Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
+        if (random.NextDouble() > 0.5)
+            floor.GetComponent<Renderer>().material.mainTexture = floorTextures[random.Next(0, floorTextures.Length)];
     }
 
     private void createCeiling(int x, int y)
