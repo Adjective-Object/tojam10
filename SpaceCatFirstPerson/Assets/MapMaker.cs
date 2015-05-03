@@ -1737,8 +1737,11 @@ public class MapMaker : MonoBehaviour {
             }
         }
 
+        //Spawn boss
+        Instantiate(enemies[1], new Vector3(finalRoom.Y + finalRoom.Height/2, 0.5f, finalRoom.X + finalRoom.Width/2), Quaternion.identity);
+
         //Create level teleporter
-        Instantiate(teleporterPrefab, new Vector3(finalRoom.Y + random.Next(0, finalRoom.Height), 0.5f, finalRoom.X + random.Next(0, finalRoom.Width)), Quaternion.identity);
+        GameObject teleporter = (GameObject)Instantiate(teleporterPrefab, new Vector3(finalRoom.Y + finalRoom.Height/2, 0.5f, finalRoom.X + finalRoom.Width/2), Quaternion.identity);
     }
 
     public void destroyMap()
