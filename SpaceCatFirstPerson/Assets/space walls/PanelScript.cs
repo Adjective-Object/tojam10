@@ -22,16 +22,16 @@ public class PanelScript : MonoBehaviour
         switch (rand.Next(0, 3))
         {
             case 0: //Full panel
-                GetComponent<Renderer>().material.SetTexture("_MainTex", FullPanelBackgrounds[0]);
-                GetComponent<Renderer>().material.SetTexture("_PanelTex", FullPanels[0]);
+                GetComponent<Renderer>().material.SetTexture("_MainTex", FullPanelBackgrounds[rand.Next(0, FullPanelBackgrounds.Length)]);
+                GetComponent<Renderer>().material.SetTexture("_PanelTex", FullPanels[rand.Next(0, FullPanels.Length)]);
                 break;
             case 1:
-                GetComponent<Renderer>().material.SetTexture("_MainTex", LeftPanelBackgrounds[0]);
-                GetComponent<Renderer>().material.SetTexture("_PanelTex", LeftPanels[0]);
+                GetComponent<Renderer>().material.SetTexture("_MainTex", LeftPanelBackgrounds[rand.Next(0, LeftPanelBackgrounds.Length)]);
+                GetComponent<Renderer>().material.SetTexture("_PanelTex", LeftPanels[rand.Next(0, LeftPanels.Length)]);
                 break;
             case 2:
-                GetComponent<Renderer>().material.SetTexture("_MainTex", RightPanelBackgrounds[0]);
-                GetComponent<Renderer>().material.SetTexture("_PanelTex", RightPanels[0]);
+                GetComponent<Renderer>().material.SetTexture("_MainTex", RightPanelBackgrounds[rand.Next(0, RightPanelBackgrounds.Length)]);
+                GetComponent<Renderer>().material.SetTexture("_PanelTex", RightPanels[rand.Next(0, RightPanels.Length)]);
                 break;
             default:
                 break;
