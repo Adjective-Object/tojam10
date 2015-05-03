@@ -11,9 +11,12 @@ public class LivingEntity : MonoBehaviour {
 	public float hspread = 0.1f;
 	public float vmin = 1;
 	public float vmax = 3;
+	
+	private Animator stateMachine;
 
 	// Use this for initialization
 	void Start () {
+		this.stateMachine = this.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -22,6 +25,9 @@ public class LivingEntity : MonoBehaviour {
 	
 	public void damageFor(int dmg) {
 		this.health -= dmg;
+		if (this.health <= 0) {
+			stateMachine.SetBool("alive", false);
+		}
 	}
 	
 	public void SpewGibs(int gibsCount) {
