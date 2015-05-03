@@ -4,6 +4,7 @@ using System.Collections;
 public class LivingEntity : MonoBehaviour {
 
 	public int health;
+	private int maxHealth;
 
 	public Sprite[] gibSprites;
 	public GameObject gibPrefab;
@@ -21,6 +22,7 @@ public class LivingEntity : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.stateMachine = this.GetComponent<Animator>();
+		this.maxHealth = health;
 	}
 	
 	// Update is called once per frame
@@ -45,5 +47,10 @@ public class LivingEntity : MonoBehaviour {
 				Vector3.right * Random.Range(-hspread, hspread) +
 				Vector3.up * Random.Range(vmin,vmax);
 		}
+	}
+	
+	public void resetHealth(){
+		this.health = this.maxHealth;
+		stateMachine.SetBool("alive", true);
 	}
 }
