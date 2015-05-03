@@ -18,7 +18,6 @@ public class PanelScript : MonoBehaviour
     void Start()
     {
         rand = new System.Random();
-        Debug.Log("Gonna make some panels");
         switch (rand.Next(0, 3))
         {
             case 0: //Full panel
