@@ -29,6 +29,10 @@ public class Bullet : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other) {
 		if (other.GetComponentInParent<Bullet>() != null) return;
+		Door d = other.GetComponentInParent<Door>();
+		if (d != null) {
+			if (d.isOpen) return;
+		}
 
 		LivingEntity e = other.GetComponentInParent<LivingEntity>();
 		if (e!=null) e.damageFor(this.damage);

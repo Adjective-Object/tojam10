@@ -12,8 +12,11 @@ public class EnemyRandomWalk : MonoBehaviour {
 	
 	private Animator animator;
 	private LivingEntity livingEntity;
+	private CharacterController controller;
 	private Vector3 destination;
 	private float closeEnough = 1;
+	private float giveUpThreshold = 0.01f;
+	private Vector3 lastPos = Vector3.zero;
 
 	public enum STATE {IDLE, ATTACK, MOVE};
 	private STATE state;
@@ -25,11 +28,14 @@ public class EnemyRandomWalk : MonoBehaviour {
 		}
 		animator = this.GetComponent<Animator>();
 		livingEntity = this.GetComponent<LivingEntity>();
+		controller = this.GetComponent<CharacterController>();
 	} 
 	
 	// Update is called once per frame
 	void Update () {
+		
 		if(!livingEntity.alive) {
+			Destroy(controller);
 			Destroy(this);
 			return;
 		}
@@ -47,12 +53,12 @@ public class EnemyRandomWalk : MonoBehaviour {
 							Vector3.up) *
 						Vector3.forward *
 						Random.Range(randomWalkMinDistance, randomWalkMaxDistance);
-				Debug.Log("dogwalk to "+destination);
+				//Debug.Log("walk to "+destination);
 			}
 			
 		}
 		
-		if(this.state == STATE.MOVE) {
+		else if(this.state == STATE.MOVE) {
 			 if ((this.destination - this.transform.position).magnitude < closeEnough) {
 				// if close to destination, switch to IDLE
 				this.animator.SetBool("move", false);
@@ -60,13 +66,15 @@ public class EnemyRandomWalk : MonoBehaviour {
 			 }
 			 else {
 				 // lerp towards destination if not close enough
-				 this.transform.position = 
-					 Vector3.MoveTowards(
-						 this.transform.position, 
-						 this.destination, 
-						 this.speed * Time.deltaTime);
+				lastPos = this.transform.position;		
+				this.controller.Move( 
+					 	(this.destination - this.transform.position) * this.speed * Time.deltaTime);
+				// give up if stuck on geometry
+				if ((this.lastPos - this.transform.position).magnitude < this.giveUpThreshold) {
+					this.state = STATE.IDLE;
+				}
 			 }
 		}
-		
+
 	}
 }
