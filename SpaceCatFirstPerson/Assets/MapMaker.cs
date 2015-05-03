@@ -1642,12 +1642,12 @@ public class MapMaker : MonoBehaviour {
         }
 
         //Draw map.
-        StringBuilder str = new StringBuilder();
+        //StringBuilder str = new StringBuilder();
         for (int h = 0; h < height; h++)
         {
             for (int w = 0; w < width; w++)
             {
-                str.Append("" + mapBuilder.map[w, h]);
+                //str.Append("" + mapBuilder.map[w, h]);
                 if (mapBuilder.map[h, w] == (int)TileTypes.Blocked)
                 {
                     if (h > 0 && w > 0 && w < width - 1 && h < height - 1)
@@ -1668,10 +1668,9 @@ public class MapMaker : MonoBehaviour {
                     createCeiling(w, h);
                 }
             }
-            str.Append("\n");
+            //str.Append("\n");
         }
-
-        Debug.Log(str);
+        //Debug.Log(str);
 
         //Create doors for all corridors.
         foreach (csMapbuilder.Point corridor in mapBuilder.corridorEdges)

@@ -85,7 +85,6 @@ public class Door : MonoBehaviour {
         {
             if (other.tag == "Player")
             {
-                Debug.Log("Entered muh door");
                 isOpening = true;
                 timer = 0;
             }
