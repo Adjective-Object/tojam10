@@ -22,7 +22,6 @@ public class BounceOnFloor : MonoBehaviour {
 			
 			Rigidbody body = this.GetComponent<Rigidbody>();
 			if (body != null) {
-				Debug.Log("bounce");
 				body.velocity = new Vector3(
 					body.velocity.x * falloff,
 					-body.velocity.y * falloff,
