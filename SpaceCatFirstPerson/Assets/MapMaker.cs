@@ -1599,6 +1599,8 @@ public class MapMaker : MonoBehaviour {
     public GameObject floorPrefab;
     public GameObject ceilingPrefab;
 
+    public GameObject teleporterPrefab;
+
     public GameObject[] enemies;
 
     private MeshFilter filter;
@@ -1624,20 +1626,24 @@ public class MapMaker : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        random = new System.Random();
+        createMap();
+	}
+
+    public void createMap()
+    {
         height = 150;
         width = 150;
 
-        random = new System.Random();
-
         MapMaker.csMapbuilder mapBuilder = new MapMaker.csMapbuilder(width, height);
-        
+
         //Attempt to make a map.
         while (mapBuilder.Build_OneStartRoom() == false)
         {
             //Map generation failed
             Debug.Log("Map gen failed, raising map size and retrying...");
-            width+=10;
-            height+=10;
+            width += 10;
+            height += 10;
         }
 
         //Draw map.
@@ -1687,7 +1693,7 @@ public class MapMaker : MonoBehaviour {
 
         //Move player to starting room
         player.transform.position = new Vector3(mapBuilder.rctBuiltRooms[0].X, 0.5f, mapBuilder.rctBuiltRooms[0].Y);
-        
+
 
         //Create enemies
         bool isStartingRoom = true;
@@ -1706,7 +1712,21 @@ public class MapMaker : MonoBehaviour {
                 GameObject enemy = (GameObject)Instantiate(enemies[0], new Vector3(room.Y + random.Next(0, room.Height), 0.5f, room.X + random.Next(0, room.Width)), Quaternion.identity);
             }
         }
-	}
+
+        //Create level teleporter
+        csMapbuilder.Rectangle finalRoom = mapBuilder.rctBuiltRooms[mapBuilder.rctBuiltRooms.Count - 1];
+        Instantiate(teleporterPrefab, new Vector3(finalRoom.Y + random.Next(0, finalRoom.Height), 0.5f, finalRoom.X + random.Next(0, finalRoom.Width)), Quaternion.identity);
+    }
+
+    public void destroyMap()
+    {
+        foreach (GameObject o in FindObjectsOfType<GameObject>())
+        {
+            if (o.tag != "Player" && o.tag != "MainCamera" && o.tag != "Scene")
+                Destroy(o);
+        }
+        createMap();
+    }
 
     private void createFloor(int x, int y)
     {
