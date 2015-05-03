@@ -1586,12 +1586,12 @@ public class MapMaker : MonoBehaviour {
     public int width;
     public int height;
 
-    public GameObject ceiling;
-    public GameObject floor;
     public GameObject player;
 
     public Material material;
     public GameObject wallPrefab;
+    public GameObject floorPrefab;
+    public GameObject ceilingPrefab;
 
     private MeshFilter filter;
 
@@ -1620,13 +1620,12 @@ public class MapMaker : MonoBehaviour {
 
         MapMaker.csMapbuilder mapBuilder = new MapMaker.csMapbuilder(width, height);
         StringBuilder str = new StringBuilder();
-        if (mapBuilder.Build_OneStartRoom() == true)
+        while (mapBuilder.Build_OneStartRoom() == false)
         {
-
-        }
-        else
-        {
-            Debug.Log("Map gen failed");
+            Debug.Log("Map gen failed, raising map size and retrying...");
+            width+=10;
+            height+=10;
+            mapBuilder.Build_OneStartRoom();
         }
 
         for (int h = 0; h < height; h++)
@@ -1643,8 +1642,14 @@ public class MapMaker : MonoBehaviour {
                             mapBuilder.map[h, w - 1] != (int)TileTypes.Blocked ||
                             mapBuilder.map[h, w + 1] != (int)TileTypes.Blocked)
                             createWall(w, h);
-                    }else
+                    }
+                    else
                         createWall(w, h);
+                }
+                else
+                {
+                    createFloor(w, h);
+                    createCeiling(w, h);
                 }
             }
             str.Append("\n");
@@ -1654,25 +1659,17 @@ public class MapMaker : MonoBehaviour {
 
         player.transform.position = new Vector3(mapBuilder.rctBuiltRooms[0].X, 0.5f, mapBuilder.rctBuiltRooms[0].Y);
         
-
-        floor.transform.position = new Vector3(width / 2 - 0.5f, 0, height / 2 - 0.5f);
-        ceiling.transform.position = new Vector3(width / 2 - 0.5f, 1, height / 2 - 0.5f);
-
-        floor.transform.localScale = new Vector3(width, height, 1);
-        ceiling.transform.localScale = new Vector3(width, height, 1);
-
-        floor.GetComponent<Renderer>().material.renderQueue = 1;
-        ceiling.GetComponent<Renderer>().material.renderQueue = 2;
-
-        float tsize_x = (1f / tile_count_x);
-        float tsize_y = (1f / tile_count_y);
-        floor.GetComponent<MeshFilter>().mesh.uv = new Vector2[] {
-			new Vector2(tsize_x * this.tileset_x, 		tsize_y * this.tileset_y),
-			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * this.tileset_y),
-			new Vector2(tsize_x * this.tileset_x, 		tsize_y * (this.tileset_y + 1)),
-			new Vector2(tsize_x * (this.tileset_x + 1), tsize_y * (this.tileset_y + 1))
-		};
 	}
+
+    private void createFloor(int x, int y)
+    {
+        GameObject floor = (GameObject)Instantiate(floorPrefab, new Vector3(x, -0.5f, y), Quaternion.identity);
+    }
+
+    private void createCeiling(int x, int y)
+    {
+        GameObject ceil = (GameObject)Instantiate(ceilingPrefab, new Vector3(x, 1.5f, y), Quaternion.identity);
+    }
 
     /// <summary>
     /// Create a wall cube at given tile position.
