@@ -5,9 +5,8 @@ public class LivingEntity : MonoBehaviour {
 
 	public int health;
 
-	public string[] gibSpritePaths;
-	private Sprite[] gibSprites;
-	private Object gibPrefab = null;
+	public Sprite[] gibSprites;
+	public GameObject gibPrefab;
 	
 	public float hspread = 0.1f;
 	public float vmin = 1;
@@ -15,12 +14,6 @@ public class LivingEntity : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		gibSprites = new Sprite[gibSpritePaths.Length];
-		for(int i=0; i<gibSpritePaths.Length; i++) {
-			gibSprites[i] = Resources.Load<Sprite>(gibSpritePaths[i]);
-			Debug.Log(gibSpritePaths[i] +"\t"+gibSprites[i]);
-		}
-		gibPrefab = Resources.Load("gibPrefab");
 	}
 	
 	// Update is called once per frame
