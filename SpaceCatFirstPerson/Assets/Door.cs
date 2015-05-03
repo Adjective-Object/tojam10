@@ -35,6 +35,7 @@ public class Door : MonoBehaviour {
                 isOpening = false;
                 timer = 0;
                 doorCollider.enabled = false;
+                doorModel.transform.position = new Vector3(doorModel.transform.position.x, 1, doorModel.transform.position.z);
             }
             else
             {
@@ -58,6 +59,7 @@ public class Door : MonoBehaviour {
             if (timer > doorTime)
             {
                 isClosing = false;
+                doorModel.transform.position = new Vector3(doorModel.transform.position.x, 0, doorModel.transform.position.z);
             }
             else
             {
