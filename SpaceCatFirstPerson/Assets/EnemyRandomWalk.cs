@@ -20,6 +20,10 @@ public class EnemyRandomWalk : MonoBehaviour {
 
 	public enum STATE {IDLE, ATTACK, MOVE};
 	private STATE state;
+	private bool aggro = false;
+
+	public float attackChance = 0.9f;
+	public float moveChance = 0.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -29,10 +33,23 @@ public class EnemyRandomWalk : MonoBehaviour {
 		animator = this.GetComponent<Animator>();
 		livingEntity = this.GetComponent<LivingEntity>();
 		controller = this.GetComponent<CharacterController>();
-	} 
+	}
 	
 	// Update is called once per frame
 	void Update () {
+		
+		if (!aggro) {
+			if((player.transform.position - this.transform.position).magnitude < aggroRange) {
+				aggro = true;
+				this.animator.SetBool("aggro", true);
+			}
+			return;
+		} else {
+			if((player.transform.position - this.transform.position).magnitude > aggroRange) {
+				aggro = false;
+				this.animator.SetBool("aggro", false);
+			}
+		}
 		
 		if(!livingEntity.alive) {
 			Destroy(controller);
@@ -42,7 +59,7 @@ public class EnemyRandomWalk : MonoBehaviour {
 		
 		if (this.state == STATE.IDLE) {
 			// randomly move with some probability
-			if (Random.Range(0f, 1f) < Time.deltaTime ) {
+			if (Random.Range(0f, 1f) < Time.deltaTime * moveChance) {
 				this.state = STATE.MOVE;
 				this.animator.SetBool("move", true);
 				this.destination = 
@@ -54,6 +71,11 @@ public class EnemyRandomWalk : MonoBehaviour {
 						Vector3.forward *
 						Random.Range(randomWalkMinDistance, randomWalkMaxDistance);
 				//Debug.Log("walk to "+destination);
+			}
+			// else attack with some probability
+			else if (Random.Range(0f, 1f) < Time.deltaTime * attackChance) {
+				this.state = STATE.ATTACK;
+				this.animator.SetBool("attack", true);
 			}
 			
 		}
@@ -71,10 +93,15 @@ public class EnemyRandomWalk : MonoBehaviour {
 					 	(this.destination - this.transform.position) * this.speed * Time.deltaTime);
 				// give up if stuck on geometry
 				if ((this.lastPos - this.transform.position).magnitude < this.giveUpThreshold) {
+					this.animator.SetBool("move", false);
 					this.state = STATE.IDLE;
 				}
 			 }
 		}
-
+	}
+	public void endAttack(){
+		this.state = STATE.IDLE;		
+		this.animator.SetBool("move", false);
+		this.animator.SetBool("attack", false);
 	}
 }
